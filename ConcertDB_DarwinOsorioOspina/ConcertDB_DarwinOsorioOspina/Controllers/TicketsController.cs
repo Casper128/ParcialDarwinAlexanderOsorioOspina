@@ -63,14 +63,23 @@ namespace ConcertDB_DarwinOsorioOspina.Controllers
             {
                 if (id != objTicket.Id)
                 {
-                    return NotFound("Ticket not found");
+                    return NotFound("Ticket ID provided is different in JSON or Url");
                 }
                 else
                 {
-                    objTicket.UseDate = DateTime.Now;
-                    objTicket.IsUsed = true;
-                    _context.Tickets.Update(objTicket);
-                    await _context.SaveChangesAsync();
+                    var existingTicket = await _context.Tickets.FindAsync(id);
+                    if (existingTicket != null)
+                    {
+                        existingTicket.EntranceGate = objTicket.EntranceGate;
+                        existingTicket.UseDate = DateTime.Now;
+                        existingTicket.IsUsed = true;
+                        //_context.Tickets.Update(objTicket);
+                        await _context.SaveChangesAsync();
+                    }
+                    else { 
+                        return NotFound("Boleta no válida");
+                    }
+                    
                 }
             }
             catch (Exception ex)

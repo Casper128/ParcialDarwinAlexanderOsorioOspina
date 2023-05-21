@@ -1,35 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import { useFetch } from './useFetch';
+import { useForm } from './useForm';
+import './App.css';
 
-function App() {
-  const [count, setCount] = useState(0)
+const initialForm={
+  id:'',
+  entranceGate:'',
+}
+
+export const App = () => {
+  const { handleGet, handleSubmit} = useFetch();
+  const { id, entranceGate, onInputChange, onResetForm} = useForm(initialForm);
+  const [data, setData] = useState([])
+  const getUrl = "https://localhost:7120/api/Tickets/Get";
+  const putUrl = `https://localhost:7120/api/Tickets/Put/${id}`;
+  const deleteUrl = `https://localhost:7120/api/Tickets/Delete/${id}`;
+
+  useEffect(() => {
+    handleGet(getUrl, setData);
+  }, []);
+
+console.log(id, entranceGate)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="container">
+        <h1>Tabla de datos</h1>
+        {/* <!-- Formulario --> */}
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h2>Agregar nuevo registro</h2>
+            <form id="formulario" onSubmit={(event)=>handleSubmit(event,id,entranceGate,putUrl,onResetForm,getUrl, setData)}>
+              <div className="form-group">
+                <label htmlFor="id">ID:</label>
+                <input type="text" name="id" className="form-control" id="id" required onChange={onInputChange}/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="entranceGate">Entrance Gate:</label>
+                <select type="text" name="entranceGate" className="form-control" id="entranceGate" onChange={onInputChange} >
+                  <option value="Norte">Norte</option>
+                  <option value="Sur">Sur</option>
+                  <option value="Oriental">Oriental</option>
+                  <option value="Occidental">Occidental</option>
+                </select>
+              </div>
+              <button type="submit" className="btn btn-primary">Guardar</button>
+            </form>
+          </div>
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+
+      {/* <!-- Tabla de datos --> */}
+      <div className="container table-container">
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Is Used</th>
+              <th>Entrance Gate</th>
+              <th>Use Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((item) => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.isUsed ? 'Sí' : 'No'}</td>
+                <td>{item.entranceGate == null ? "null" : item.entranceGate}</td>
+                <td>{item.useDate == null ? "null" : item.useDate}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
 
-export default App

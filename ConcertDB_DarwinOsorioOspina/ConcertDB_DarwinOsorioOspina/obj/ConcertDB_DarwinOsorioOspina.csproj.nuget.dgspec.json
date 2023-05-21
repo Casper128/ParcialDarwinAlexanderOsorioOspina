@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj": {}
+    "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj": {
+    "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj",
+        "projectUniqueName": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj",
         "projectName": "ConcertDB_DarwinOsorioOspina",
-        "projectPath": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj",
+        "projectPath": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina.csproj",
         "packagesPath": "C:\\Users\\Casper\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\obj\\",
+        "outputPath": "C:\\Users\\Casper\\Documents\\GitHub\\ParcialDarwinAlexanderOsorioOspina\\ConcertDB_DarwinOsorioOspina\\ConcertDB_DarwinOsorioOspina\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Casper\\AppData\\Roaming\\NuGet\\NuGet.Config",
