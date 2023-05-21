@@ -2,6 +2,7 @@
 using ConcertDB_DarwinOsorioOspina.DAL.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConcertDB_DarwinOsorioOspina.Controllers
 {
@@ -20,88 +21,75 @@ namespace ConcertDB_DarwinOsorioOspina.Controllers
         [Route("Get")]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-            var citys = await _context.Tickets.ToListAsync(); // Select * From Countries
+            var tickets = await _context.Tickets.ToListAsync(); // Select * From Countries
 
-            if (citys == null) return NotFound();
+            if (tickets == null) return NotFound();
 
-            return citys;
+            return tickets;
         }
 
         [HttpGet, ActionName("Get")]
         [Route("Get/{id}")]
-        public async Task<ActionResult<City>> GetCityById(Guid? id)
+        public async Task<ActionResult<Ticket>> GetTicketsById(Guid? id)
         {
-            var citys = await _context.Cities.FirstOrDefaultAsync(c => c.Id == id); //Select * From Countries Where Id = "..."
-
-            if (citys == null) return NotFound();
-
-            return Ok(citys);
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            if (ticket  == null) return NotFound();
+            return Ok(ticket);
         }
 
-        [HttpPost, ActionName("Create")]
-        [Route("Create")]
-        public async Task<ActionResult> CreateCountry(City citys)
+        [HttpPost, ActionName("Post")]
+        [Route("Post")]
+        public async Task<ActionResult> CreateTicket(Ticket objTicket)
         {
             try
             {
-                citys.Id = Guid.NewGuid();
-                citys.CreatedDate = DateTime.Now;
-
-                _context.Cities.Add(citys);
-                await _context.SaveChangesAsync(); // Aquí es donde se hace el Insert Into...
+                objTicket.Id = Guid.NewGuid();
+                _context.Tickets.Add(objTicket);
+                await _context.SaveChangesAsync();
             }
-            catch (DbUpdateException dbUpdateException)
+            catch (Exception error)
             {
-                if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    return Conflict(String.Format("{0} ya existe", citys.Name));
+                return Conflict(error.Message);
+            }
+
+            return Ok(objTicket);
+        }
+
+        [HttpPut, ActionName("Put")]
+        [Route("Put/{id}")]
+        public async Task<ActionResult> EditTicket(Guid? id, Ticket objTicket)
+        {
+            try
+            {
+                if (id != objTicket.Id)
+                {
+                    return NotFound("Ticket not found");
+                }
+                else
+                {
+                    objTicket.UseDate = DateTime.Now;
+                    objTicket.IsUsed = true;
+                    _context.Tickets.Update(objTicket);
+                    await _context.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
                 return Conflict(ex.Message);
             }
-
-            return Ok(citys);
-        }
-
-        [HttpPut, ActionName("Edit")]
-        [Route("Edit/{id}")]
-        public async Task<ActionResult> EditCountry(Guid? id, City citys)
-        {
-            try
-            {
-                if (id != citys.Id) return NotFound("Country not found");
-
-                citys.ModifiedDate = DateTime.Now;
-
-                _context.Cities.Update(citys);
-                await _context.SaveChangesAsync(); // Aquí es donde se hace el Update...
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                if (dbUpdateException.InnerException.Message.Contains("duplicate"))
-                    return Conflict(String.Format("{0} ya existe", citys.Name));
-            }
-            catch (Exception ex)
-            {
-                return Conflict(ex.Message);
-            }
-
-            return Ok(citys);
+            return Ok(objTicket);
         }
 
         [HttpDelete, ActionName("Delete")]
         [Route("Delete/{id}")]
-        public async Task<ActionResult> DeleteCities(Guid? id)
+        public async Task<ActionResult> DeleteTicket(Guid? id)
         {
-            if (_context.Countries == null) return Problem("Entity set 'DataBaseContext.Countries' is null.");
-            var citys = await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
-
-            if (citys == null) return NotFound("Country not found");
-
-            _context.Countries.Remove(citys);
-            await _context.SaveChangesAsync(); //Hace las veces del Delete en SQL
-
-            return Ok(String.Format("El país {0} fue eliminado!", citys.Name));
+            if (_context.Tickets == null) return Problem("Entity set 'DataBaseContext.Ticket' is null.");
+            var ticket = await _context.Tickets.FirstOrDefaultAsync(c => c.Id == id);
+            if (ticket  == null) return NotFound("Ticket not found");
+            _context.Tickets.Remove(ticket);
+            await _context.SaveChangesAsync();
+            return Ok(String.Format("This ticket {0} has been delete!", ticket.Id));
         }
     }
 }

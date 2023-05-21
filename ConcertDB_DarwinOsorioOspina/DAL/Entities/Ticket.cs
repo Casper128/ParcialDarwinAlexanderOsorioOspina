@@ -20,7 +20,7 @@ namespace ConcertDB_DarwinOsorioOspina.DAL.Entity
         [Display(Name = "IsUsed")]
         [MaxLength(100, ErrorMessage = "The {0} field must have a maximum of {1} characters.")]
         [Required(ErrorMessage = "The field {0} is required.")]
-        public string? UseDate { get; set; }
+        public DateTime? UseDate { get; set; }
 
     }
 }
