@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\ConcertDB_DarwinOsorioOspina.props" />
+</Project>
