@@ -11,7 +11,6 @@ export const useFetch = () => {
             };
             const response = await fetch(url, requestOptions);
             const result = await response.json();
-            console.log(response);
             setData(result);
         } catch (error) {
             console.log('error', error);
@@ -19,32 +18,32 @@ export const useFetch = () => {
         
     };
 
-
-
-
-const handleSubmit = async (event,id,gate,url,onResetForm,getUrl, setData) => {
-    event.preventDefault();
-    try {
-        const requestOptions = {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id,
-                entrancegate: gate
-            })
-        };
-        console.log(requestOptions.body)
-        const response = await fetch(url, requestOptions);
-        console.log(response)
-        // Restablece el formulario
-        onResetForm();
-        handleGet(getUrl, setData);
-    } catch (error) {
-        console.log('error', error);
-    }
-};
+    const handleSubmit = async (event, id, gate, url, onResetForm, getUrl, setData) => {
+        event.preventDefault();
+        try {
+            const requestOptions = {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,
+                    entrancegate: gate
+                })
+            };
+            const response = await fetch(url, requestOptions);
+            console.log(response);
+            const result = await response.json();
+            onResetForm();
+            handleGet(getUrl, setData);
+            return result; 
+        } catch (error) {
+            console.log('error', error);
+            // throw error;
+            onResetForm();
+            return error;
+        }
+    };
 
 
 const handleDelete = async (id) => {

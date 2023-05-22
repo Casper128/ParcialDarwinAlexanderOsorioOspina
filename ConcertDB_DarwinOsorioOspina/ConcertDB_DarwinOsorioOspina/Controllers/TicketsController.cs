@@ -21,8 +21,7 @@ namespace ConcertDB_DarwinOsorioOspina.Controllers
         [Route("Get")]
         public async Task<ActionResult<IEnumerable<Ticket>>> GetTickets()
         {
-            var tickets = await _context.Tickets.ToListAsync(); // Select * From Countries
-
+            var tickets = await _context.Tickets.Take(1000).ToListAsync();
             if (tickets == null) return NotFound();
 
             return tickets;
@@ -57,7 +56,7 @@ namespace ConcertDB_DarwinOsorioOspina.Controllers
 
         [HttpPut, ActionName("Put")]
         [Route("Put/{id}")]
-        public async Task<ActionResult> EditTicket(Guid? id, Ticket objTicket)
+        public async Task<IActionResult> EditTicket(Guid? id, Ticket objTicket)
         {
             try
             {
@@ -70,23 +69,37 @@ namespace ConcertDB_DarwinOsorioOspina.Controllers
                     var existingTicket = await _context.Tickets.FindAsync(id);
                     if (existingTicket != null)
                     {
-                        existingTicket.EntranceGate = objTicket.EntranceGate;
-                        existingTicket.UseDate = DateTime.Now;
-                        existingTicket.IsUsed = true;
-                        //_context.Tickets.Update(objTicket);
-                        await _context.SaveChangesAsync();
+                        if (existingTicket.IsUsed == false && objTicket.EntranceGate!="")
+                        {
+                            existingTicket.EntranceGate = objTicket.EntranceGate;
+                            existingTicket.UseDate = DateTime.Now;
+                            existingTicket.IsUsed = true;
+                            objTicket = existingTicket;
+                            await _context.SaveChangesAsync();
+                        }
+                        else 
+                        {
+                            if (objTicket.EntranceGate == "")
+                            {
+                                return NotFound(new { error = "EntranceGate esta vacio" });
+                            }
+                            else {
+                                return NotFound(new { error = "Boleta ya usada" });
+                            }
+                        }
+                        
                     }
-                    else { 
-                        return NotFound("Boleta no válida");
+                    else {
+                        return NotFound(new { error = "Boleta no válida" });
+
                     }
-                    
                 }
             }
             catch (Exception ex)
             {
-                return Conflict(ex.Message);
+                return Conflict(new { error = ex.Message });
             }
-            return Ok(objTicket);
+            return Ok(true);
         }
 
         [HttpDelete, ActionName("Delete")]

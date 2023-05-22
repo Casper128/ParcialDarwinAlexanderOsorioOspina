@@ -9,6 +9,10 @@ const initialForm={
 }
 
 export const App = () => {
+  const [result, setResult] = useState(false);
+  const [message, setMessage] = useState(false);
+  const [message2, setmessage2] = useState(false);
+  const [message3, setmessage3] = useState(false);
   const { handleGet, handleSubmit} = useFetch();
   const { id, entranceGate, onInputChange, onResetForm} = useForm(initialForm);
   const [data, setData] = useState([])
@@ -20,7 +24,33 @@ export const App = () => {
     handleGet(getUrl, setData);
   }, []);
 
-console.log(id, entranceGate)
+const handleEditSubmit=async (event,id,entranceGate,putUrl,onResetForm,getUrl, setData)=>{
+  const response=await handleSubmit(event,id,entranceGate,putUrl,onResetForm,getUrl, setData);
+  if(response===true){
+    setResult(true);
+    setMessage(false);
+    setmessage2(false);
+    setmessage3(false);
+  }
+  if(response.status===400 || response.error==="Boleta no válida"){
+    setMessage(true);
+    setResult(false);
+    setmessage2(false);
+    setmessage3(false);
+  }
+  if(response.error==="Boleta ya usada"){
+    setMessage(false);
+    setResult(false);
+    setmessage2(true);
+    setmessage3(false);
+  }
+  if(response.error==="EntranceGate esta vacio"){
+    setMessage(false);
+    setResult(false);
+    setmessage2(false);
+    setmessage3(true);
+  }
+}
 
   return (
     <>
@@ -30,14 +60,19 @@ console.log(id, entranceGate)
         <div className="row">
           <div className="col-md-6 offset-md-3">
             <h2>Agregar nuevo registro</h2>
-            <form id="formulario" onSubmit={(event)=>handleSubmit(event,id,entranceGate,putUrl,onResetForm,getUrl, setData)}>
+            {result && <h3>Boleta válida, puede ingresar al concierto</h3>}
+            {message && <h3>Boleta no válida</h3>}
+            {message2 && <h3>Boleta ya usada</h3>}
+            {message3 && <h3>EntranceGate esta vacio</h3>}       
+            <form id="formulario" onSubmit={(event)=>handleEditSubmit(event,id,entranceGate,putUrl,onResetForm,getUrl, setData)}>
               <div className="form-group">
                 <label htmlFor="id">ID:</label>
-                <input type="text" name="id" className="form-control" id="id" required onChange={onInputChange}/>
+                <input type="text" name="id" className="form-control" id="id" required value={id} onChange={onInputChange}/>
               </div>
               <div className="form-group">
                 <label htmlFor="entranceGate">Entrance Gate:</label>
-                <select type="text" name="entranceGate" className="form-control" id="entranceGate" onChange={onInputChange} >
+                <select type="text" name="entranceGate" className="form-control" id="entranceGate"  value={entranceGate}  onChange={onInputChange} >
+                  <option value="">Default</option>
                   <option value="Norte">Norte</option>
                   <option value="Sur">Sur</option>
                   <option value="Oriental">Oriental</option>
@@ -55,6 +90,7 @@ console.log(id, entranceGate)
         <table className="table table-striped">
           <thead>
             <tr>
+              <th>#</th>
               <th>ID</th>
               <th>Is Used</th>
               <th>Entrance Gate</th>
@@ -62,8 +98,9 @@ console.log(id, entranceGate)
             </tr>
           </thead>
           <tbody>
-            {data.map((item) => (
+            {data.map((item,index) => (
               <tr key={item.id}>
+                <td>{index}</td>
                 <td>{item.id}</td>
                 <td>{item.isUsed ? 'Sí' : 'No'}</td>
                 <td>{item.entranceGate == null ? "null" : item.entranceGate}</td>
