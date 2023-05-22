@@ -8,7 +8,7 @@ namespace ConcertDB_DarwinOsorioOspina.DAL.Entity
         public Guid Id { get; set; }
 
         [Display(Name = "EntranceGate")]
-        [MaxLength(100, ErrorMessage = "The {0} field must have a maximum of {1} characters. perrrroooo")]
+        [MaxLength(100, ErrorMessage = "The {0} field must have a maximum of {1} characters.")]
         public string? EntranceGate { get; set; }
 
         [Display(Name = "IsUsed")]
