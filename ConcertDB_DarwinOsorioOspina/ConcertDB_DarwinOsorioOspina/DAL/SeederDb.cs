@@ -23,7 +23,7 @@ namespace ConcertDB_DarwinOsorioOspina.DAL
             if (!_context.Tickets.Any())
             {
                 int i = 0;
-                while (i < 5000)
+                while (i < 50000)
                 {
                     await _context.Tickets.AddAsync(new Ticket
                     {
